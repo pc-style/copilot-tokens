@@ -7,6 +7,20 @@ https://gist.github.com/ekroon/424b81ebca907b5e5de3ce07a649da5e
 
 ## Run
 
+Install the `copilot-tokens` command:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/pc-style/copilot-tokens/main/install.sh | bash
+```
+
+Then run:
+
+```bash
+copilot-tokens
+```
+
+Or run from a local checkout:
+
 ```bash
 bun install
 bun run start
