@@ -1,28 +1,35 @@
 # copilot-tokens
 
-TypeScript/Bun TUI for watching GitHub Copilot CLI process logs and counting session token usage in real time.
+> [!WARNING]
+> **Archived. Development has moved to
+> [`pc-style/copilot-token-counter`](https://github.com/pc-style/copilot-token-counter),
+> the canonical successor.** This repository remains available as a read-only
+> record of the alternate process-log implementation.
 
-It is based on the log parsing approach from ekroon's Copilot token cost gist:
-https://gist.github.com/ekroon/424b81ebca907b5e5de3ce07a649da5e
+## Problem and solution
 
-## Run
+This experiment watches local GitHub Copilot CLI process logs and presents parsed
+token usage in a TypeScript/Bun terminal UI. It combines log-derived usage with
+session workspace files to group activity by model, day, and project.
 
-Install the `copilot-tokens` command:
+Use the canonical repository for installation and future changes. This archived
+implementation is retained because it has several distinct ideas: custom data-path
+flags, configurable refresh timing, recent-call output, section visibility settings,
+and a tested process-log parser.
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/pc-style/copilot-tokens/main/install.sh | bash
-```
+## Demo
 
-Then run:
+This repository does not include a screenshot or hosted demo. The interface provides
+Summary, By Model, By Day, By Project, Recent Calls, and optional Pricing sections.
 
-```bash
-copilot-tokens
-```
+## Historical local use
 
-Or run from a local checkout:
+Requires [Bun](https://bun.sh). From a checkout:
 
-```bash
-bun install
+```sh
+bun install --frozen-lockfile
+bun run check
+bun test
 bun run start
 ```
 
@@ -32,11 +39,52 @@ Defaults:
 - Session state: `~/.copilot/session-state`
 - Refresh: `1500ms`
 
-Override paths when testing or reading logs from another machine:
+Paths and refresh timing can be overridden:
 
-```bash
+```sh
 bun run start --logs-dir /path/to/logs --session-dir /path/to/session-state --refresh-ms 1000
 ```
+
+The historical `install.sh` still exists for reproducibility, but it installs this
+archived implementation. New users should install from the canonical repository.
+
+## Trust and privacy
+
+- The TUI reads local Copilot process logs and session workspace files.
+- The application contains no telemetry or session-data upload code.
+- Process logs may contain more than token metrics. The parser reads each matching
+  log file in full, while the UI displays parsed models, timestamps, filenames,
+  workspace paths, and usage values. Take care when sharing output.
+- Dependency installation contacts the configured package registry. The historical
+  installer also contacts GitHub.
+- Cost figures are estimates based on the static February 2026 pricing snapshot,
+  not Copilot billing statements.
+
+## Status
+
+Archived and read-only as of August 2026. No fixes, compatibility updates, or price
+updates are planned in this repository. Its source and Git history remain available
+for reference; use
+[`pc-style/copilot-token-counter`](https://github.com/pc-style/copilot-token-counter)
+for the canonical project.
+
+## License
+
+This repository has no license file or license grant. Copyright remains with its
+owner; public source availability does not by itself grant permission to copy,
+modify, or redistribute the code. The canonical successor is available under MIT.
+
+## Provenance and relationship
+
+Created on May 4, 2026 as an alternate implementation after
+`copilot-token-counter`, this code uses the log-parsing approach from
+[ekroon's Copilot token cost gist](https://gist.github.com/ekroon/424b81ebca907b5e5de3ce07a649da5e).
+
+The canonical project instead tails structured
+`~/.copilot/session-state/*/events.jsonl` data and uses OpenTUI. It does not currently
+include this repository's process-log input, path/refresh flags, recent-call panel,
+or settings modal. Archiving this repository preserves those unique implementation
+ideas without presenting two active projects with the same command name.
 
 ## Keys
 
@@ -45,12 +93,3 @@ bun run start --logs-dir /path/to/logs --session-dir /path/to/session-state --re
 - `esc`: close settings
 - `r`: refresh now
 - `q`: quit
-
-## Sections
-
-- Summary
-- By Model
-- By Day
-- By Project
-- Recent Calls
-- Pricing
